@@ -1,0 +1,9 @@
+.git
+.clerk
+.env*
+launchpad-mu1otc5j
+.next
+.pages
+coverage
+tests
+*.tsbuildinfo

@@ -1,0 +1,16 @@
+ALTER TABLE "evidence" ADD COLUMN IF NOT EXISTS "source_url" text;
+ALTER TABLE "evidence" ADD COLUMN IF NOT EXISTS "file_name" text;
+ALTER TABLE "evidence" ADD COLUMN IF NOT EXISTS "file_type" text;
+ALTER TABLE "evidence" ADD COLUMN IF NOT EXISTS "file_size" integer;
+ALTER TABLE "evidence" ADD COLUMN IF NOT EXISTS "file_data" text;
+ALTER TABLE "evidence" ADD COLUMN IF NOT EXISTS "sha256" text;
+CREATE INDEX IF NOT EXISTS workspaces_owner_idx ON workspaces (clerk_id);
+CREATE INDEX IF NOT EXISTS projects_owner_workspace_idx ON projects (clerk_id, workspace_id);
+CREATE INDEX IF NOT EXISTS findings_owner_project_idx ON findings (clerk_id, project_id);
+CREATE INDEX IF NOT EXISTS evidence_owner_project_idx ON evidence (clerk_id, project_id);
+CREATE INDEX IF NOT EXISTS reports_owner_project_idx ON reports (clerk_id, project_id);
+CREATE INDEX IF NOT EXISTS notes_owner_project_idx ON notes (clerk_id, project_id);
+CREATE INDEX IF NOT EXISTS time_entries_owner_project_idx ON time_entries (clerk_id, project_id);
+CREATE INDEX IF NOT EXISTS activities_owner_project_idx ON activities (clerk_id, project_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS team_members_owner_project_idx ON team_members (clerk_id, project_id);
+CREATE INDEX IF NOT EXISTS skills_owner_idx ON skills (clerk_id);

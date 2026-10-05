@@ -1,0 +1,12 @@
+"use client";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { ArrowUpRight, Search } from "lucide-react";
+import { Modal } from "./ui";
+import { navItems } from "../lib/types";
+type Result={id:string;title:string;type:string;href:string};
+export function CommandSearch({onClose}:{onClose:()=>void}){
+  const [query,setQuery]=useState(""),[results,setResults]=useState<Result[]>([]),[pending,setPending]=useState(false),[error,setError]=useState("");
+  useEffect(()=>{if(query.trim().length<2)return;const controller=new AbortController();const timer=setTimeout(async()=>{setPending(true);setError("");try{const response=await fetch(`/api/search?q=${encodeURIComponent(query.trim())}`,{signal:controller.signal});if(!response.ok)throw new Error(response.status===401?"Sign in to search your research.":"Search is unavailable. Please try again.");setResults(await response.json());}catch(err){if(!controller.signal.aborted)setError(err instanceof Error?err.message:"Search failed.");}finally{if(!controller.signal.aborted)setPending(false);}},200);return()=>{clearTimeout(timer);controller.abort();};},[query]);
+  return <Modal title="Jump to anything" description="Search your research or open a section. Ctrl / ⌘ K from anywhere." onClose={onClose}><label className="command-input"><Search size={18}/><input autoFocus value={query} onChange={e=>{setQuery(e.target.value);setResults([]);setPending(e.target.value.trim().length>=2);setError("");}} aria-label="Search your research" placeholder="Projects, findings, evidence, reports…" maxLength={100}/></label><div className="command-results" aria-live="polite">{query.trim().length<2?<><p className="eyebrow">Navigate</p>{navItems.map(item=>{const Icon=item.icon;return <Link key={item.id} className="command-result" href={item.id==="dashboard"?"/":`/${item.id}`} onClick={onClose}><Icon size={16}/><span>{item.label}</span><ArrowUpRight size={14}/></Link>;})}</>:pending?<p className="command-message">Searching your workspace…</p>:error?<p className="error-message" role="alert">{error}</p>:results.length?results.map(r=><Link className="command-result" key={`${r.type}-${r.id}`} href={r.href} onClick={onClose}><span className="command-type">{r.type}</span><span>{r.title}</span><ArrowUpRight size={14}/></Link>):<p className="command-message">No results for “{query}”. Try a different name.</p>}</div></Modal>;
+}
