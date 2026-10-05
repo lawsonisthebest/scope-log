@@ -2,6 +2,10 @@
 
 A workspace for security assessments, research, evidence, findings, progress tracking, and reports. Built with Next.js, Clerk, and Neon Postgres.
 
+**Live app:** [scope-log.vercel.app](https://scope-log.vercel.app)  
+**GitHub Pages:** [lawsonisthebest.github.io/scope-log](https://lawsonisthebest.github.io/scope-log/) (opens the live app)  
+**Source:** [lawsonisthebest/scope-log](https://github.com/lawsonisthebest/scope-log)
+
 ## Run locally
 
 Requires Node.js 24 and npm.
